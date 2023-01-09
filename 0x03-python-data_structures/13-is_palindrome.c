@@ -40,3 +40,5 @@ int is_palindrome(listint_t **head)
 	if ((*head)->next == NULL)
 		return (1);
 
+	return (palindrome_rec(head, *head));
+}
