@@ -1,7 +1,7 @@
-# Task On Object-relational mapping In Python
+# Task on object relational mapping in python
 
-Things to accomplish...
+Things to be done on this task - 
 
 * Connecting MySQL database using Python script
-* How to `SELECT` and `INSERT` rows in a MySQL table from a Python script
-* Mapping a Python Class to a 6MySQL table
+* How to SELECT and INSERT rows in a MySQL table from a Python script
+* How to map a Python Class to a MySQL table

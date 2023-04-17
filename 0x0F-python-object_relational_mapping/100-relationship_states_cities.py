@@ -1,37 +1,24 @@
 #!/usr/bin/python3
 """
-Script that creates the `State` “California” with the
-`City` “San Francisco” from the database `hbtn_0e_100_usa`.
-
-Arguments:
-    mysql username (str)
-    mysql password (str)
-    database name (str)
+Improve the files model_city.py and model_state.py, and save
+them as relationship_city.py and relationship_state.py
 """
-
 import sys
-from sqlalchemy import (create_engine)
 from sqlalchemy.orm import Session
-from sqlalchemy.engine.url import URL
-from relationship_state import Base, State
-from relationship_city import City
+from sqlalchemy import create_engine
+from relationship_state import State
+from relationship_city import City, Base
 
 
 if __name__ == "__main__":
-    mySQL_u = sys.argv[1]
-    mySQL_p = sys.argv[2]
-    db_name = sys.argv[3]
-
-    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
-           'username': mySQL_u, 'password': mySQL_p, 'database': db_name}
-
-    engine = create_engine(URL(**url), pool_pre_ping=True)
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
+                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
     Base.metadata.create_all(engine)
-
-    session = Session(bind=engine)
-
-    newState = State(name="California")
-    newState.cities.append(City(name="San Francisco"))
-
-    session.add(newState)
+    session = Session(engine)
+    s1 = State(name='California')
+    c1 = City(name='San Francisco')
+    s1.cities.append(c1)
+    session.add_all([c1, s1])
     session.commit()
+    session.close()

@@ -1,35 +1,19 @@
 #!/usr/bin/python3
+"""script that lists all State objects from the database hbtn_0e_6_usa
 """
-Script that prints all `City` objects from the database `hbtn_0e_14_usa`.
-
-Arguments:
-    mysql username (str)
-    mysql password (str)
-    database name (str)
-"""
-
 import sys
-from sqlalchemy import (create_engine)
 from sqlalchemy.orm import Session
-from sqlalchemy.engine.url import URL
-from model_state import Base, State
+from sqlalchemy import create_engine
 from model_city import City
+from model_state import Base, State
 
 
 if __name__ == "__main__":
-    mySQL_u = sys.argv[1]
-    mySQL_p = sys.argv[2]
-    db_name = sys.argv[3]
-
-    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
-           'username': mySQL_u, 'password': mySQL_p, 'database': db_name}
-
-    engine = create_engine(URL(**url), pool_pre_ping=True)
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
+                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
     Base.metadata.create_all(engine)
-
-    session = Session(bind=engine)
-
-    q = session.query(City, State).filter(City.state_id == State.id)
-
-    for city, state in q:
-        print("{}: ({}) {}".format(state.name, city.id, city.name))
+    session = Session(engine)
+    s = session.query(City, State)
+    print(s)
+    session.close()
